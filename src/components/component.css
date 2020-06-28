@@ -193,6 +193,16 @@ border-bottom {
   height: 120px;
   margin: 10px !important;
   cursor: pointer !important;
+  position: relative;
+}
+
+.board-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: inherit;
+  width: inherit;
+  z-index: 1;
 }
 
 .board.new {
@@ -405,7 +415,10 @@ border-bottom {
 }
 
 .label-task {
-  flex: 100%;
+  flex: 10%;
+  height: 15px;
+  margin-bottom: 10px;
+  border-radius: 0.3rem;
 }
 
 .name-task {
@@ -467,6 +480,60 @@ border-bottom {
   padding-left: 15px;
   display: flex;
   justify-content: space-between;
+  position: relative;
+}
+
+.label-container {
+  position: absolute;
+  top: 36px;
+  right: 18px;
+  width: 25%;
+  border-radius: 0.3rem;
+  margin: 10px auto;
+  z-index: 1;
+}
+
+.label {
+  width: 14%;
+  height: 15px;
+  margin-bottom: 10px;
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+
+.label:hover {
+  border: 2px solid cornflowerblue;
+}
+
+.label-container div {
+  height: 30px;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin: 5px 5px;
+}
+
+.duedate-container {
+  position: absolute;
+  top: 45px;
+  right: 28%;
+  width: auto;
+  height: auto;
+  border-radius: 0.3rem;
+  margin: 10px auto;
+  z-index: 1;
+}
+
+.delete-container {
+  position: absolute;
+  top: 116px;
+  right: 36px;
+  width: 23%;
+  border-radius: 0.3rem;
+  margin: 10px auto;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .body-left {

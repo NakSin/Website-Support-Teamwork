@@ -10,7 +10,7 @@ import {
 } from "../axiosfunction/boardFunc";
 import jwt_decode from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faUserPlus, faStar } from "@fortawesome/free-solid-svg-icons";
 import "./component.css";
 
 import { Card } from "antd";
@@ -18,17 +18,20 @@ import "antd/dist/antd.css";
 
 const Board = (props) => {
   return (
-    <Card.Grid
-      className="board bg-primary"
-      title="Card title"
-      hoverable
-      style={{ width: 250 }}
-    >
+    <Card.Grid className="board bg-primary" hoverable style={{ width: 250 }}>
+      <div className="board-cover" onClick={props.goInside}>
+        {props.userId === props.board.usersjoin[0]._id ? (
+          <FontAwesomeIcon
+            style={{ fontSize: "18px", margin: "10px 10px" }}
+            icon={faStar}
+          />
+        ) : null}
+      </div>
       <div className="row mx-auto">
-        <div className="col-sm-10 align-self-center" onClick={props.goInside}>
+        <div className="col-sm-10 align-self-center">
           Name: {props.board.nameBoard}
         </div>
-        <div className="col-sm-2 text-center">
+        <div className="col-sm-2 text-center" style={{ zIndex: "2" }}>
           <FontAwesomeIcon
             style={{ fontSize: "18px", marginTop: "10px" }}
             icon={faTrash}
@@ -37,10 +40,8 @@ const Board = (props) => {
         </div>
       </div>
       <div className="row mx-auto">
-        <div className="col-sm-10 align-self-center" onClick={props.goInside}>
-          {props.board.created}
-        </div>
-        <div className="col-sm-2 text-center">
+        <div className="col-sm-10 align-self-center">{props.board.created}</div>
+        <div className="col-sm-2 text-center" style={{ zIndex: "2" }}>
           <FontAwesomeIcon
             style={{ fontSize: "18px", marginTop: "10px" }}
             icon={faUserPlus}
@@ -77,6 +78,7 @@ export default class BoardList extends Component {
               nameBoard: res[i].boardname,
               ticket: res[i].ticket,
               created: res[i].created,
+              usersjoin: res[i].usersjoin,
             },
           ]);
           this.setState({ boards: nextBoard });
@@ -111,6 +113,7 @@ export default class BoardList extends Component {
               nameBoard: name,
               ticket: ticket,
               created: created,
+              usersjoin: res[res.length - 1].usersjoin,
             },
           ]);
           this.setState({ boards: nextBoard });
@@ -154,10 +157,11 @@ export default class BoardList extends Component {
   };
 
   render() {
-    const { boards, isOnClick } = this.state;
+    const { userId, boards, isOnClick } = this.state;
     const listBoard = boards.map((currentBoard, index) => {
       return (
         <Board
+          userId={userId}
           board={currentBoard}
           key={index}
           remove={() => this.handleRemoveBoard(index)}

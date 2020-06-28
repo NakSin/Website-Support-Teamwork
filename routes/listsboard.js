@@ -71,24 +71,48 @@ router.route("/:id").delete((req, res) => {
       for (var i = 0; i < taskId.length; i++) {
         Comment.deleteMany({
           taskId: taskId[i]._id,
-        })
-          .then(() => res.json("Comment Delete"))
-          .catch((err) => res.status(400).json("Error:" + err));
+        }).catch((err) => res.status(400).json("Error:" + err));
         Ticket.deleteMany({
           taskId: taskId[i]._id,
-        })
-          .then(() => res.json("Ticket Delete"))
-          .catch((err) => res.status(400).json("Error:" + err));
+        }).catch((err) => res.status(400).json("Error:" + err));
       }
       Task.deleteMany({
         listId: req.params.id,
-      })
-        .then(() => res.json("Task Delete"))
+      }).catch((err) => res.status(400).json("Error:" + err));
+
+      List.findByIdAndDelete(req.params.id).catch((err) =>
+        res.status(400).json("Error:" + err)
+      );
+    })
+    .catch((err) => res.status(400).json("Error:" + err));
+});
+
+router.route("/removeTask/:id").delete((req, res) => {
+  Task.findOne(
+    {
+      _id: req.params.id,
+    },
+    { _id: 0, listId: 1 }
+  )
+    .then((list) => {
+      Comment.deleteMany({
+        taskId: req.params.id,
+      }).catch((err) => res.status(400).json("Error:" + err));
+
+      Ticket.deleteMany({
+        taskId: req.params.id,
+      }).catch((err) => res.status(400).json("Error:" + err));
+
+      List.updateOne(
+        { _id: list.listId },
+        { $pull: { taskId: { _id: req.params.id } } }
+      )
+        .then(() => res.json("List Update"))
         .catch((err) => res.status(400).json("Error:" + err));
 
-      List.findByIdAndDelete(req.params.id)
-        .then(() => res.json("List Delete"))
-        .catch((err) => res.status(400).json("Error:" + err));
+      Task.findByIdAndDelete(req.params.id).catch((err) =>
+        res.status(400).json("Error:" + err)
+      );
     })
     .catch((err) => res.status(400).json("Error:" + err));
 });

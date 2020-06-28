@@ -7,7 +7,9 @@ const taskSchema = new Schema({
   detail: { type: String, required: false },
   listId: { type: String, required: true },
   ticketId: [{ _id: { type: String, required: false } }],
-  loading: { type: Number, required: true }
+  loading: { type: Number, required: true },
+  label: { type: String, required: false },
+  dueDate: { type: String, required: false },
 });
 
 module.exports = mongoose.model("Task", taskSchema);

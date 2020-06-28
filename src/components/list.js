@@ -14,6 +14,14 @@ export default class List extends Component {
     newName: "",
     listId: "",
     tasks: [],
+    label: "",
+    dueDate: new Date(),
+  };
+
+  UNSAFE_componentWillMount = () => {
+    const listId = this.props.list.id;
+    this.setState({ listId: listId });
+    this.handleLoadList(listId);
   };
 
   UNSAFE_componentWillUpdate = () => {
@@ -36,12 +44,6 @@ export default class List extends Component {
     }
   };
 
-  UNSAFE_componentWillMount = () => {
-    const listId = this.props.list.id;
-    this.setState({ listId: listId });
-    this.handleLoadList(listId);
-  };
-
   handleLoadList = (listId) => {
     load(listId).then((res) => {
       if (res) {
@@ -59,6 +61,8 @@ export default class List extends Component {
                 detail: res[i].detail,
                 ticketId: res[i].ticketId,
                 loading: res[i].loading,
+                label: res[i].label,
+                dueDate: res[i].dueDate,
               },
             ]);
             this.setState({ tasks: nextTask });
@@ -85,7 +89,7 @@ export default class List extends Component {
 
   handleNameTask = ({ name, numberTicket, created, detail, loading }) => {
     let listId = this.props.list.id;
-    let { tasks } = this.state;
+    let { tasks, label, dueDate } = this.state;
     let ticketId = [];
     let value = {
       name,
@@ -95,6 +99,8 @@ export default class List extends Component {
       detail,
       ticketId,
       loading,
+      label,
+      dueDate,
     };
     create(value).then(() => {
       load(listId).then((res) => {
@@ -110,6 +116,8 @@ export default class List extends Component {
                 detail: detail,
                 ticketId: ticketId,
                 loading: loading,
+                label: label,
+                dueDate: dueDate,
               },
             ]);
             this.setState({ tasks: nextTask });

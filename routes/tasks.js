@@ -77,6 +77,34 @@ router.route("/edit/:id").post((req, res) => {
     )
       .then(() => res.json("Task Name Change"))
       .catch((err) => res.status(400).json("Error" + err));
+  } else if (req.body.type == "editLabel") {
+    Task.updateOne(
+      {
+        _id: req.params.id,
+      },
+      {
+        $set: {
+          label: req.body.description,
+        },
+      },
+      function (err, num) {}
+    )
+      .then(() => res.json("Task Label Change"))
+      .catch((err) => res.status(400).json("Error" + err));
+  } else if (req.body.type == "editDueDate") {
+    Task.updateOne(
+      {
+        _id: req.params.id,
+      },
+      {
+        $set: {
+          dueDate: req.body.description,
+        },
+      },
+      function (err, num) {}
+    )
+      .then(() => res.json("Task Due Date Change"))
+      .catch((err) => res.status(400).json("Error" + err));
   }
 });
 

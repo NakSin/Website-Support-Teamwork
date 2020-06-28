@@ -9,10 +9,10 @@ router.route("/:id").get((req, res) => {
     },
     { taskId: 1 }
   )
-    .then((boardList) => {
-      if (boardList) {
+    .then((list) => {
+      if (list) {
         Task.find({
-          listId: boardList[0]._id,
+          listId: list[0]._id,
         }).then((task) => {
           res.json(task);
         });
@@ -29,6 +29,8 @@ router.route("/").post((req, res) => {
   const detail = req.body.detail;
   const ticketId = req.body.ticketId;
   const loading = req.body.loading;
+  const label = req.body.label;
+  const dueDate = req.body.dueDate;
   const newTask = new Task({
     taskname,
     numberticket,
@@ -37,6 +39,8 @@ router.route("/").post((req, res) => {
     detail,
     ticketId,
     loading,
+    label,
+    dueDate,
   });
   newTask
     .save()

@@ -17,7 +17,15 @@ router.route("/:id").get((req, res) => {
       _id: { $in: memberId },
     }).then((user) => {
       const infoMember = [];
-      for (var i = 0; i < member[0].usersjoin.length; i++) {
+      for (var i = 0; i < user.length; i++) {
+        for (var j = 0; j < user.length; j++) {
+          if (user[j]._id == memberId[i]) {
+            user.push(user[j]);
+            user.splice(j, 1);
+          }
+        }
+      }
+      for (var i = 0; i < user.length; i++) {
         infoMember.push({
           id: user[i]._id,
           name: user[i].name,
@@ -45,20 +53,20 @@ router.route("/remove").post((req, res) => {
 
 router.route("/add").post((req, res) => {
   const date = new Date();
-  User.find({
+  User.findOne({
     email: req.body.email,
   }).then((member) => {
     Board.updateOne(
       {
         _id: req.body.boardId,
-        "usersjoin._id": { $exists: true, $ne: member[0]._id },
+        "usersjoin._id": { $exists: true, $ne: member._id },
       },
       {
         $addToSet: {
           usersjoin: {
             $each: [
               {
-                _id: member[0]._id,
+                _id: member._id,
                 role: "Member",
                 datejoin:
                   date.getHours() +

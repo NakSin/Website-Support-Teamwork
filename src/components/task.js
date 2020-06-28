@@ -10,6 +10,8 @@ export default class Task extends Component {
       createdTask: this.props.task.created,
       detailTask: this.props.task.detail,
       loading: this.props.task.loading,
+      label: this.props.task.label,
+      dueDate: this.props.task.dueDate,
     };
     this.props.onTaskClick({ infoTaskClick });
   };
@@ -17,7 +19,12 @@ export default class Task extends Component {
   render() {
     return (
       <div className="task bg-secondary" onClick={this.handleClickTask}>
-        <div className="label-task">Label</div>
+        {this.props.task.label !== "" ? (
+          <div
+            className="label-task"
+            style={{ backgroundColor: `${this.props.task.label}` }}
+          ></div>
+        ) : null}
         <div className="name-task">{this.props.task.nameTask}</div>
       </div>
     );

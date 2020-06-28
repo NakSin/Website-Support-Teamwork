@@ -44,11 +44,11 @@ export default class Ticket extends Component {
   }
 
   handleCheckDone() {
-    let { taskId, ticketId } = this.state;
+    let { ticketId } = this.state;
     const currentState = this.state.check;
     this.setState({ check: !currentState });
     check(ticketId, !currentState);
-    this.props.onLoading({ taskId, ticketId, currentState });
+    this.props.onLoading({ ticketId, currentState });
   }
 
   handleRemoveTicket() {

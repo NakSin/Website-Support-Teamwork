@@ -72,7 +72,7 @@ export default class SignIn extends Component {
                       className="form-control"
                       placeholder="Email address"
                       required
-                      autoComplete="off"
+                      // autoComplete="off"
                       onChange={this.handleOnChangeEmail}
                       onClick={this.handleClearError}
                       value={email}

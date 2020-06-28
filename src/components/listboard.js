@@ -3,7 +3,12 @@ import Navbar from "./navbar";
 import CreateList from "./createlist";
 import List from "./list";
 import TaskDialog from "./taskdialog";
-import { load, create, remove } from "../axiosfunction/listboardFunc";
+import {
+  load,
+  create,
+  remove,
+  removeTask,
+} from "../axiosfunction/listboardFunc";
 import jwt_decode from "jwt-decode";
 import "./component.css";
 
@@ -120,6 +125,19 @@ export default class ListBoard extends Component {
     }
   };
 
+  handleDeleteTask = ({ taskId }) => {
+    let { boardId, lists, isTaskClick } = this.state;
+    const currentList = lists;
+    let currentState = isTaskClick;
+    this.setState({ isTaskClick: !currentState });
+    removeTask(taskId).then(() => {
+      if (currentList !== null) {
+        this.setState({ lists: [] });
+        this.handleLoadList(boardId);
+      }
+    });
+  };
+
   render() {
     const {
       lists,
@@ -152,6 +170,7 @@ export default class ListBoard extends Component {
               <div className="cover" onClick={this.handleShowDialog}></div>
               <TaskDialog
                 onTaskClick={this.handleShowDialog}
+                onDeleteTask={this.handleDeleteTask}
                 infoTaskClick={tasks}
                 editName={this.handleEditLoad}
                 userId={userId}
