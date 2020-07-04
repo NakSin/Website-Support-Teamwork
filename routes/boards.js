@@ -1,5 +1,10 @@
 const router = require("express").Router();
 let Board = require("../models/board.model");
+let List = require("../models/list.model");
+let Task = require("../models/task.model");
+let Ticket = require("../models/ticket.model");
+let Comment = require("../models/comment.model");
+
 const jwt = require("jsonwebtoken");
 
 process.env.SECRET_KEY = "secret";
@@ -47,8 +52,45 @@ router.route("/").post((req, res) => {
 });
 
 router.route("/:id").delete((req, res) => {
-  Board.findByIdAndDelete(req.params.id)
-    .then(() => res.json("Board Delete"))
+  List.find(
+    {
+      boardId: req.params.id,
+    },
+    { _id: 1, taskId: 1 }
+  )
+    .then((list) => {
+      const listId = [];
+      for (var i = 0; i < list.length; i++) {
+        listId.push(list[i]._id);
+      }
+      Task.find({
+        listId: { $in: listId },
+      }).then((task) => {
+        const taskId = [];
+        for (var i = 0; i < task.length; i++) {
+          taskId.push(task[i]._id);
+        }
+        Comment.deleteMany({
+          taskId: { $in: taskId },
+        }).catch((err) => res.status(400).json("Error:" + err));
+
+        Ticket.deleteMany({
+          taskId: { $in: taskId },
+        }).catch((err) => res.status(400).json("Error:" + err));
+
+        Task.deleteMany({
+          listId: { $in: listId },
+        }).catch((err) => res.status(400).json("Error:" + err));
+
+        List.deleteMany({
+          boardId: req.params.id,
+        }).catch((err) => res.status(400).json("Error:" + err));
+
+        Board.findByIdAndDelete(req.params.id)
+          .then(() => res.json("Board Delete"))
+          .catch((err) => res.status(400).json("Error:" + err));
+      });
+    })
     .catch((err) => res.status(400).json("Error:" + err));
 });
 

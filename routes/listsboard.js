@@ -60,12 +60,13 @@ router.route("/").post((req, res) => {
     .catch((err) => res.status(400).json("Error" + err));
 });
 
-router.route("/:id").delete((req, res) => {
+router.route("/remove").post((req, res) => {
   Task.find(
     {
-      listId: req.params.id,
+      listId: req.body.listId,
     },
-    { _id: 1 }
+    { _id: 1 },
+    function (err, num) {}
   )
     .then((taskId) => {
       for (var i = 0; i < taskId.length; i++) {
@@ -77,12 +78,12 @@ router.route("/:id").delete((req, res) => {
         }).catch((err) => res.status(400).json("Error:" + err));
       }
       Task.deleteMany({
-        listId: req.params.id,
+        listId: req.body.listId,
       }).catch((err) => res.status(400).json("Error:" + err));
 
-      List.findByIdAndDelete(req.params.id).catch((err) =>
-        res.status(400).json("Error:" + err)
-      );
+      List.findByIdAndDelete(req.body.listId)
+        .then(() => res.json("List Delete"))
+        .catch((err) => res.status(400).json("Error:" + err));
     })
     .catch((err) => res.status(400).json("Error:" + err));
 });

@@ -21,7 +21,7 @@ export const create = (infoList) => {
 
 export const remove = (listId) => {
   return axios
-    .delete("http://localhost:5000/listsboard/" + listId)
+    .post("http://localhost:5000/listsboard/remove", { listId })
     .catch((err) => {
       console.log(err);
     });

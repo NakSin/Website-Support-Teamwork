@@ -146,6 +146,10 @@ export default class List extends Component {
     });
   };
 
+  handleDelete = () => {
+    this.props.remove();
+  };
+
   render() {
     const { tasks, isOnClick } = this.state;
     const task = tasks.map((currentTask, index) => {
@@ -168,7 +172,7 @@ export default class List extends Component {
           <div className="icon-button" onClick={this.handleEditName}>
             <FontAwesomeIcon icon={faPencilAlt} />
           </div>
-          <div className="icon-button" onClick={this.props.remove}>
+          <div className="icon-button" onClick={this.handleDelete}>
             <FontAwesomeIcon icon={faTrash} />
           </div>
         </div>

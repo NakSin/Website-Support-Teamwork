@@ -31,13 +31,15 @@ const Board = (props) => {
         <div className="col-sm-10 align-self-center">
           Name: {props.board.nameBoard}
         </div>
-        <div className="col-sm-2 text-center" style={{ zIndex: "2" }}>
-          <FontAwesomeIcon
-            style={{ fontSize: "18px", marginTop: "10px" }}
-            icon={faTrash}
-            onClick={props.remove}
-          />
-        </div>
+        {props.userId === props.board.usersjoin[0]._id ? (
+          <div className="col-sm-2 text-center" style={{ zIndex: "2" }}>
+            <FontAwesomeIcon
+              style={{ fontSize: "18px", marginTop: "10px" }}
+              icon={faTrash}
+              onClick={props.remove}
+            />
+          </div>
+        ) : null}
       </div>
       <div className="row mx-auto">
         <div className="col-sm-10 align-self-center">{props.board.created}</div>

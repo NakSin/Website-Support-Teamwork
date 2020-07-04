@@ -68,14 +68,14 @@ export default class Ticket extends Component {
           <input
             className="input-name-ticket"
             style={{ textDecoration: "line-through" }}
-            value={this.state.nameTicket}
+            defaultValue={this.state.nameTicket}
             onChange={this.handleChangeName}
             onClick={this.handleClickTicket}
           />
         ) : (
           <input
             className="input-name-ticket"
-            value={this.props.ticket.nameTicket}
+            defaultValue={this.props.ticket.nameTicket}
             onChange={this.handleChangeName}
             onClick={this.handleClickTicket}
           />

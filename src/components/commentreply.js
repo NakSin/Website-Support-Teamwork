@@ -1,60 +1,88 @@
 import React, { Component } from "react";
 import reqwest from "reqwest";
+import { load } from "../axiosfunction/commentFunc";
 import "antd/dist/antd.css";
 import { List, Avatar, Button, Skeleton } from "antd";
-const count = 6;
-const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat&noinfo`;
+// const count = 6;
+// const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat&noinfo`;
 
 export default class CommentReply extends Component {
   state = {
     initLoading: true,
     loading: false,
-    data: [],
+    commentsReply: [],
     list: [],
   };
 
   componentDidMount() {
-    this.getData((res) => {
-      this.setState({
-        initLoading: false,
-        data: res.results,
-        list: res.results,
-      });
-    });
+    // this.getData((res) => {
+    //   this.setState({
+    //     initLoading: false,
+    //     data: res.results,
+    //     list: res.results,
+    //   });
+    // });
+    const taskId = this.props.taskId;
+    this.handleLoadComment(taskId);
   }
 
-  getData = (callback) => {
-    reqwest({
-      url: fakeDataUrl,
-      type: "json",
-      method: "get",
-      contentType: "application/json",
-      success: (res) => {
-        callback(res);
-      },
+  handleLoadComment = (taskId) => {
+    load(taskId).then((res) => {
+      if (res) {
+        console.log(res);
+        // for (var i = 0; i < res.length; i++) {
+        //   let { comments } = this.state;
+        //   const currentComment = comments;
+        //   const nextComment = currentComment.concat([
+        //     {
+        //       commentId: res[i]._id,
+        //       author: res[i].author,
+        //       content: res[i].content,
+        //       userId: res[i].userId,
+        //       // isReply: isReply,
+        //       // isEdit: isEdit,
+        //       // isDelete: isDelete,
+        //     },
+        //   ]);
+        //   this.setState({ comments: nextComment });
+        // }
+      }
     });
   };
+
+  // getData = (callback) => {
+  //   reqwest({
+  //     url: fakeDataUrl,
+  //     type: "json",
+  //     method: "get",
+  //     contentType: "application/json",
+  //     success: (res) => {
+  //       callback(res);
+  //     },
+  //   });
+  // };
 
   onLoadMore = () => {
     this.setState({
       loading: true,
       list: this.state.data.concat(
-        [...new Array(count)].map(() => ({ loading: true, name: {} }))
+        [...new Array(3)].map(() => ({ loading: true, name: {} }))
       ),
     });
-    this.getData((res) => {
-      const data = this.state.data.concat(res.results);
-      this.setState(
-        {
-          data,
-          list: data,
-          loading: false,
-        },
-        () => {
-          window.dispatchEvent(new Event("resize"));
-        }
-      );
-    });
+
+    // this.getData((res) => {
+    //   const data = this.state.data.concat(res.results);
+    //   this.setState(
+    //     {
+    //       data,
+    //       list: data,
+    //       loading: false,
+    //     },
+    //     () => {
+    //       window.dispatchEvent(new Event("resize"));
+    //     }
+    //   );
+    // });
   };
 
   render() {

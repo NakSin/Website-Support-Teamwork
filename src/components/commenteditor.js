@@ -83,6 +83,7 @@ export default class CommemtEditor extends Component {
 
   componentDidMount = () => {
     const taskId = this.props.taskId;
+    this.setState({ taskId: taskId });
     this.handleLoadComment(taskId);
   };
 

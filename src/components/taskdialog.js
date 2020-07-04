@@ -27,6 +27,7 @@ const DetailHeader = (props) => (
       className="input-name-task"
       defaultValue={props.nameTask}
       onChange={props.onChangeName}
+      onClick={props.onEditName}
     ></input>
     <div className="icon-button" onClick={props.onEditName}>
       <FontAwesomeIcon icon={faPencilAlt} />
@@ -207,12 +208,18 @@ export default class TaskDialog extends Component {
   };
 
   handleRemoveTicket = (index) => {
-    let { tickets } = this.state;
+    let { taskId, tickets } = this.state;
     let currentTicket = tickets;
     let deleteTicket = currentTicket[index].id;
-    currentTicket.splice(index, 1);
-    remove(deleteTicket);
-    this.setState({ tickets: currentTicket });
+    if (index === 0) {
+      currentTicket.shift();
+    } else {
+      currentTicket.splice(index, 1);
+    }
+    remove(deleteTicket).then(() => {
+      this.setState({ tickets: [] });
+      this.handleLoadTaskDialog(taskId);
+    });
   };
 
   handleLoading = ({ ticketId, currentState }) => {

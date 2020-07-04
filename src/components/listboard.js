@@ -41,7 +41,7 @@ export default class ListBoard extends Component {
       if (res) {
         for (var i = 0; i < res.boardList.length; i++) {
           let { lists } = this.state;
-          const currentList = lists;
+          let currentList = lists;
           const nextList = currentList.concat([
             {
               id: res.boardList[i]._id,
@@ -104,17 +104,18 @@ export default class ListBoard extends Component {
   };
 
   handleRemoveList = (index) => {
-    let { lists, boardId } = this.state;
-    const currentList = lists;
-    const deleteList = currentList[index].id;
-    currentList.splice(index, 1);
+    let { boardId, lists } = this.state;
+    let currentList = lists;
+    let deleteList = currentList[index].id;
+    if (index === 0) {
+      currentList.shift();
+    } else {
+      currentList.splice(index, 1);
+    }
     remove(deleteList).then(() => {
-      if (currentList !== null) {
-        this.setState({ lists: [] });
-        this.handleLoadList(boardId);
-      }
+      this.setState({ lists: [] });
+      this.handleLoadList(boardId);
     });
-    this.setState({ lists: currentList });
   };
 
   handleEditLoad = ({ isLoadName }) => {
